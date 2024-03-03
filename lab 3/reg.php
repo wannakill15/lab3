@@ -2,8 +2,32 @@
 session_start();
 include("db_conn.php");
 
-function sendEmail_verify($username,$email,$verify_token) {
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
+require 'path/to/PHPMailer/src/Exception.php';
+require 'path/to/PHPMailer/src/PHPMailer.php';
+require 'path/to/PHPMailer/src/SMTP.php';
+
+
+function sendEmail_verify($username,$email,$verify_token) {
+    $mail = new PHPMailer(true);
+
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+
+    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    $mail->Username   = 'ken.ae26@gmail.com';                     //SMTP username
+    $mail->Password   = 'lmed fzvu ztef bkf';                               //SMTP password
+    $mail->SMTPSecure = 'ssl';                                  //Enable implicit TLS encryption
+    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+    $mail->setFrom('ken.ae26@gmail.com', 'Admin');
+    $mail->addAddress($email);     //Add a recipient
+
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'Email Verification';
+    $mail->Body    = "Your Verification code: $verify_token" ;
 }
 
 function is_valid_email($email) {
