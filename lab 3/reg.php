@@ -2,6 +2,10 @@
 session_start();
 include("db_conn.php");
 
+function sendEmail_verify($username,$email,$verify_token) {
+
+}
+
 function is_valid_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
@@ -16,6 +20,7 @@ if(isset($_POST['reg_btn']))
     $email = $_POST['email'];
     $password = $_POST['password'];
     $username = $_POST['uname'];
+    $verify_token = md5(rand());
 
     if (!is_valid_email($email)) {
         $_SESSION['status'] = "Invalid Email Format";
@@ -34,14 +39,15 @@ if(isset($_POST['reg_btn']))
     }else
     //storing the input of the user in the database
     {
-        $query = "INSERT INTO user(First_name, Middle_name, Lastname, Email, password, username) VALUES('$first_name', '$middle_name', '$last_name', '$email', '$password', '$username')";
+        $query = "INSERT INTO user(First_name, Middle_name, Lastname, Email, password, username, validate_code) VALUES('$first_name', '$middle_name', '$last_name', '$email', '$password', '$username', '$verify_token')";
         $query_run = mysqli_query($conn, $query);
 
         //successful run indicator
         //passes to the success.php
         if($query_run)
         {
-            $_SESSION['status'] = "Registration Successfull";
+            sendEmail_verify("$username","$email","$verify_token");
+            $_SESSION['status'] = "Registration Successfull. Check your Email to Verify.";
            header("Location: success.php");
            exit();
         }
