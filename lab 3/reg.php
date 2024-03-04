@@ -5,12 +5,12 @@ include("db_conn.php");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'path/to/PHPMailer/src/Exception.php';
-require 'path/to/PHPMailer/src/PHPMailer.php';
-require 'path/to/PHPMailer/src/SMTP.php';
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
 
 
-function sendEmail_verify($username,$email,$verify_token) {
+function sendemail_verify($username,$email,$verify_token) {
     $mail = new PHPMailer(true);
 
     $mail->isSMTP();                                            //Send using SMTP
@@ -18,16 +18,24 @@ function sendEmail_verify($username,$email,$verify_token) {
 
     $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
     $mail->Username   = 'ken.ae26@gmail.com';                     //SMTP username
-    $mail->Password   = 'lmed fzvu ztef bkf';                               //SMTP password
-    $mail->SMTPSecure = 'ssl';                                  //Enable implicit TLS encryption
-    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+    $mail->Password   = 'ulht wzbs bszj ebvt';                               //SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;                                  //Enable implicit TLS encryption
+    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-    $mail->setFrom('ken.ae26@gmail.com', 'Admin');
-    $mail->addAddress($email);     //Add a recipient
+    $mail->setFrom('ken.ae26@gmail.com', $username);
+    $mail->addAddress($email);                              //Add a recipient
 
     $mail->isHTML(true);                                  //Set email format to HTML
     $mail->Subject = 'Email Verification';
-    $mail->Body    = "Your Verification code: $verify_token" ;
+    $mail->Body    = "
+    <h2>You have Registered</h4>
+    <h5>Verify your Email with the link below</h5>
+    <br/> <br/>
+    <a href='http://localhost:3000/lab%203/verify_email.php?token=$verify_token'>Email Verification</a>" ; 
+
+    $mail->send();
+    echo'Verification Send';
+    
 }
 
 function is_valid_email($email) {
@@ -44,6 +52,7 @@ if(isset($_POST['reg_btn']))
     $email = $_POST['email'];
     $password = $_POST['password'];
     $username = $_POST['uname'];
+    $status = 'Not Verified';
     $verify_token = md5(rand());
 
     if (!is_valid_email($email)) {
@@ -53,8 +62,8 @@ if(isset($_POST['reg_btn']))
     }
 
 
-    //checks if the email that the user input exist or not in the database
-    $check_email_query = "SELECT email FROM user WHERE email = '$email' LIMIT 1";
+     //checks if the email that the user input exist or not in the database
+    $check_email_query = "SELECT email FROM user_profile WHERE email = '$email' LIMIT 1";
     $check_email_query_run = mysqli_query($conn, $check_email_query);
 
     if(mysqli_num_rows($check_email_query_run) > 0){
@@ -63,14 +72,14 @@ if(isset($_POST['reg_btn']))
     }else
     //storing the input of the user in the database
     {
-        $query = "INSERT INTO user(First_name, Middle_name, Lastname, Email, password, username, validate_code) VALUES('$first_name', '$middle_name', '$last_name', '$email', '$password', '$username', '$verify_token')";
+        $query = "INSERT INTO user_profile(First_name, Middle_name, Lastname, Email, password, username, Status, verify_token) VALUES('$first_name', '$middle_name', '$last_name', '$email', '$password', '$username', '$status','$verify_token')";
         $query_run = mysqli_query($conn, $query);
 
         //successful run indicator
         //passes to the success.php
         if($query_run)
         {
-            sendEmail_verify("$username","$email","$verify_token");
+            sendemail_verify("$username","$email","$verify_token");
             $_SESSION['status'] = "Registration Successfull. Check your Email to Verify.";
            header("Location: success.php");
            exit();
@@ -79,6 +88,7 @@ if(isset($_POST['reg_btn']))
         {
             $_SESSION['status'] = "Registration Failed";
             header("Location: regform.php");
+            exit();
         }
     }
     header("Location: regform.php");
