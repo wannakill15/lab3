@@ -15,7 +15,10 @@
                         <h1 class="text-center">Registration Successful</h1>
                     </div>
                     <div class="card-body">
-                        <p class="text-center">Your account has been successfully created.</p>
+                        <p class="text-center">
+                            Your account has been successfully created. <br>
+                            Please check your Email.
+                        </p>
                         <div class="text-center">
                             <a href="Loginform.php" class="btn btn-primary">Login</a>
                         </div>
