@@ -33,7 +33,11 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
                 $_SESSION['user_id'] = $row['user_id'];
                 header("Location: home.php");
                 exit();
-            } else {
+            } else if ($row['Status'] != 'Verified'){
+                header("Location: LoginForm.php?error=Please verified your account  ");
+                exit();
+
+            }else{
                 header("Location: LoginForm.php?error=Incorrect User name or password");
                 exit();
             }
