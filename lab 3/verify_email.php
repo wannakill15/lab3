@@ -5,7 +5,7 @@ include('db_conn.php');
 
 if(isset($_GET['token'])) {
     $token = $_GET['token'];
-    $query = "SELECT verify_token, Status FROM user_profile WHERE verify_token = '$token' LIMIT 1";
+    $query = "SELECT verify_token, Status FROM user WHERE verify_token = '$token' LIMIT 1";
     $query_run = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($query_run) > 0) 
@@ -14,7 +14,7 @@ if(isset($_GET['token'])) {
         if($row['Status'] == 'Not Verified') 
         {
             $click_token = $row['verify_token'];
-            $update_query = "UPDATE user_profile SET Status = 'Verified' WHERE verify_token = '$click_token' LIMIT 1";
+            $update_query = "UPDATE user SET Status = 'Verified' WHERE verify_token = '$click_token' LIMIT 1";
             $update_query_run = mysqli_query($conn, $update_query);
 
             if($update_query_run){
