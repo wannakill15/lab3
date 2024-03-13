@@ -31,7 +31,7 @@ function sendemail_verify($username,$email,$verify_token) {
     <h2>You have Registered</h4>
     <h5>Verify your Email with the link below</h5>
     <br/> <br/>
-    <a href='verify_email.php?token=$verify_token'>Email Verification</a>" ; 
+    <a href='http://localhost:3000/lab%203/verify_email.php?token=$verify_token'>Email Verification</a>" ; 
 
     $mail->send();
     echo'Verification Send';
@@ -63,7 +63,7 @@ if(isset($_POST['reg_btn']))
 
 
      //checks if the email that the user input exist or not in the database
-    $check_email_query = "SELECT email FROM user WHERE email = '$email' LIMIT 1";
+    $check_email_query = "SELECT email FROM user_profile WHERE email = '$email' LIMIT 1";
     $check_email_query_run = mysqli_query($conn, $check_email_query);
 
     if(mysqli_num_rows($check_email_query_run) > 0){
@@ -72,7 +72,7 @@ if(isset($_POST['reg_btn']))
     }else
     //storing the input of the user in the database
     {
-        $query = "INSERT INTO user (First_name, Middle_name, Lastname, Email, password, username, Status, verify_token) VALUES('$first_name', '$middle_name', '$last_name', '$email', '$password', '$username', '$status','$verify_token')";
+        $query = "INSERT INTO user_profile (First_name, Middle_name, Lastname, Email, password, username, Status, verify_token) VALUES('$first_name', '$middle_name', '$last_name', '$email', '$password', '$username', '$status','$verify_token')";
         $query_run = mysqli_query($conn, $query);
 
         //successful run indicator

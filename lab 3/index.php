@@ -23,15 +23,15 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
         exit(); 
         //checking the user input on the database if exist
     } else {
-        $sql = "SELECT * FROM user WHERE username='$uname' AND password='$pass'";
+        $sql = "SELECT * FROM user_profile WHERE username='$uname' AND password='$pass'";
         $result = mysqli_query($conn, $sql);
-        if ($row['Status'] != 'Verified'){
+        if ($row['Status'] == 'Verified'){
             header("Location: LoginForm.php?error=Please verified your account  ");
             exit();
         
             } else if (mysqli_num_rows($result) === 1) {
                 $row = mysqli_fetch_assoc($result);
-                if ($row['username'] == $uname && $row['password'] === $pass) {
+                if ($row['username'] === $uname && $row['password'] === $pass) {
                     $_SESSION['username'] = $row['username'];
                     $_SESSION['name'] = $row['name']; 
                     $_SESSION['user_id'] = $row['user_id'];

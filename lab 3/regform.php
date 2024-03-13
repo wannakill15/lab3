@@ -35,7 +35,7 @@ session_start();
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="mname">Middle Name</label>
-                                    <input type="text" id="mname" name="mname" class="form-control"required>
+                                    <input type="text" id="mname" name="mname" class="form-control">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="lname">Last Name</label>
@@ -47,7 +47,7 @@ session_start();
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="password">Password</label>
-                                    <input type="text" id="password" name="password" class="form-control"required>
+                                    <input type="password" id="password" name="password" class="form-control"required>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="uname">UserName</label>
@@ -55,6 +55,9 @@ session_start();
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" name="reg_btn" class="btn btn-primary" >Register</button>
+                                </div>
+                                <div class="form-group">
+                                    <p> <input type="checkbox" required><a href="#">Terms</a> and Condition</p>
                                 </div>
                                 <div>
                                     <p>You have an account? <a href="Loginform.php">Sign up</a></p>
