@@ -2,14 +2,16 @@
 session_start();
 include("db_conn.php");
 
+//php mailer from gethub
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
-
+// function to send an mail to your email you register
 function sendemail_verify($username,$email,$verify_token) {
     $mail = new PHPMailer(true);
 
@@ -38,6 +40,7 @@ function sendemail_verify($username,$email,$verify_token) {
     
 }
 
+//a function to check is the email is in formal form
 function is_valid_email($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
@@ -55,6 +58,7 @@ if(isset($_POST['reg_btn']))
     $status = 'Not Verified';
     $verify_token = md5(rand());
 
+    //check the email if is in formal format
     if (!is_valid_email($email)) {
         $_SESSION['status'] = "Invalid Email Format";
         header("Location: regform.php");
@@ -79,6 +83,7 @@ if(isset($_POST['reg_btn']))
         //passes to the success.php
         if($query_run)
         {
+            //send to function to send an username, the email to send
             sendemail_verify("$username","$email","$verify_token");
             $_SESSION['status'] = "Registration Successfull. Check your Email to Verify.";
            header("Location: success.php");
